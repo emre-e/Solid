@@ -23,7 +23,8 @@ class EvolutionaryAlgorithm:
     max_steps = None
     max_fitness = None
 
-    def __init__(self, crossover_rate, mutation_rate, max_steps, max_fitness=None):
+    def __init__(self, crossover_rate, mutation_rate, max_steps,
+                 max_fitness=None):
         """
 
         :param crossover_rate: probability of crossover
@@ -31,19 +32,13 @@ class EvolutionaryAlgorithm:
         :param max_steps: maximum steps to run genetic algorithm for
         :param max_fitness: fitness value to stop algorithm once reached
         """
-        if isinstance(crossover_rate, float):
-            if crossover_rate >= 0 and crossover_rate <= 1:
-                self.crossover_rate = crossover_rate
-            else:
-                raise ValueError('Crossover rate must be a float between 0 and 1')
+        if isinstance(crossover_rate, float) and 0 <= crossover_rate <= 1:
+            self.crossover_rate = crossover_rate
         else:
             raise ValueError('Crossover rate must be a float between 0 and 1')
 
-        if isinstance(mutation_rate, float):
-            if mutation_rate >= 0 and mutation_rate <= 1:
-                self.mutation_rate = mutation_rate
-            else:
-                raise ValueError('Mutation rate must be a float between 0 and 1')
+        if isinstance(mutation_rate, float) and 0 <= mutation_rate <= 1:
+            self.mutation_rate = mutation_rate
         else:
             raise ValueError('Mutation rate must be a float between 0 and 1')
 
@@ -70,7 +65,8 @@ class EvolutionaryAlgorithm:
 
     def _clear(self):
         """
-        Resets the variables that are altered on a per-run basis of the algorithm
+        Resets the variables that are altered on a per-run basis of the
+        algorithm
 
         :return: None
         """
@@ -132,7 +128,7 @@ class EvolutionaryAlgorithm:
         shuffle(self.population)
         total_fitness = sum(self.fitnesses)
         if total_fitness != 0:
-            probs = list([self._fitness(x) / total_fitness for x in self.population])
+            probs = [self._fitness(x) / total_fitness for x in self.population]
         else:
             return self.population[0:n]
         res = []
@@ -184,7 +180,7 @@ class EvolutionaryAlgorithm:
             self.cur_steps += 1
 
             if ((i + 1) % 100 == 0) and verbose:
-                print self
+                print(self)
 
             self.population = self._select_n(num_copy)
             self._populate_fitness()
@@ -202,7 +198,7 @@ class EvolutionaryAlgorithm:
                 self.best_member = deepcopy(best_member)
 
             if self.max_fitness is not None and self.best_fitness >= self.max_fitness:
-                print "TERMINATING - REACHED MAXIMUM FITNESS"
+                print("TERMINATING - REACHED MAXIMUM FITNESS")
                 return self.best_member, self.best_fitness
-        print "TERMINATING - REACHED MAXIMUM STEPS"
+        print("TERMINATING - REACHED MAXIMUM STEPS")
         return self.best_member, self.best_fitness
